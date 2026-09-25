@@ -1,13 +1,24 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database import Base, engine
+from app.api.problems import router as problems_router
+
+from app.models.database_models import ProblemModel
+
+from app.api.attempts import router as attempts_router
+
+
+Base.metadata.create_all(bind=engine)
+
+
 app = FastAPI(
     title="LLD Practice Platform",
     description="A platform for practicing Low-Level Design",
     version="1.0.0"
 )
 
-# Allow React frontend to communicate with FastAPI
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -15,6 +26,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.include_router(problems_router)
+app.include_router(attempts_router)
 
 
 @app.get("/")

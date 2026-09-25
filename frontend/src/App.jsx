@@ -1,24 +1,56 @@
-import { useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+
+import Home from "./pages/Home";
+import Practice from "./pages/Practice";
+import History from "./pages/History";
+import Attempt from "./pages/Attempt";
 
 function App() {
-  const [message, setMessage] = useState("Connecting to backend...");
-
-  useEffect(() => {
-    fetch("http://localhost:8000/")
-      .then((response) => response.json())
-      .then((data) => {
-        setMessage(data.message);
-      })
-      .catch(() => {
-        setMessage("Backend connection failed");
-      });
-  }, []);
-
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>LLD Practice Platform</h1>
-      <p>{message}</p>
-    </div>
+    <BrowserRouter>
+
+      <nav className="navbar">
+
+        <Link to="/">
+          LLD Practice
+        </Link>
+
+        <Link to="/history">
+          My Attempts
+        </Link>
+
+      </nav>
+
+      <Routes>
+
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/practice/:problemId"
+          element={<Practice />}
+        />
+
+        <Route
+          path="/history"
+          element={<History />}
+        />
+
+        <Route
+          path="/attempts/:attemptId"
+          element={<Attempt />}
+        />
+
+      </Routes>
+
+    </BrowserRouter>
   );
 }
 
